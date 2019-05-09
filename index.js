@@ -107,4 +107,4 @@ setInterval(() => {
 			running.forEach((i) => restartServer(i));
 		});
 	});
-}, 1000);
+}, 60000);
