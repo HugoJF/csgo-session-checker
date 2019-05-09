@@ -6,6 +6,12 @@ const options = {
 	timeout: 10000,
 }
 
+let old = console.log;
+
+console.log = function () {
+	old('[' + (new Date).toUTCString() + ']', ...arguments)
+}
+
 function buildRestartUrl(ip, port, command) {
 	let token = process.env.CSGO_API_TOKEN;
 	let url = `http://csgo-server-api.denerdtv.com/send?token=${token}&ip=${ip}&port=${port}&command=${command}`;
@@ -22,18 +28,26 @@ function fetchApiServerListing(callback) {
 }
 
 function fetchOnlineServers(callback) {
-	fetchSessionForIp('170.81.43.200', (err, res, body) => {
-		if (err) 
+	fetchSessionForIp(process.env.IP, (err, res, body) => {
+		if (err) {
 			console.log('Error while fetching session information');
-		
-		if (!body)
+			return;
+		}
+
+		if (!body) {
 			console.log('Empty response body');
+			return;
+		}
 
-		if (!body.response)
+		if (!body.response){
 			console.log('Invalid response');
+			return;
+		}
 
-		if (body.response.success !== true)
+		if (body.response.success !== true) {
 			console.log('Error while requesting API information');
+			return;
+		}
 
 		let servers = body.response.servers;
 
@@ -45,14 +59,20 @@ function fetchOnlineServers(callback) {
 
 function fetchRunningServers(callback) {
 	fetchApiServerListing((err, res, body) => {
-		if (err)
+		if (err) {
 			console.log('Error fetching server API');
+			return;
+		}
 
-		if (!body)
+		if (!body) {
 			console.log('Empty response body');
+			return;
+		}
 
-		if (body.error !== false)
+		if (body.error !== false){
 			console.log('Error while fetching server API information');
+			return;
+		}
 
 		let servers = body.response;
 
@@ -77,15 +97,14 @@ function restartServer(server) {
 	});
 }
 
-fetchOnlineServers((online) => {
-	fetchRunningServers((running) => {
-		delete online[0];
-		running = running.filter((i) => !online.includes(i));
+setInterval(() => {
+	fetchOnlineServers((online) => {
+		fetchRunningServers((running) => {
+			running = running.filter((i) => !online.includes(i));
 
-		console.log('Missing servers', running);
+			console.log('Missing servers', running);
 
-		running.forEach((i) => restartServer(i));
+			running.forEach((i) => restartServer(i));
+		});
 	});
-});
-
-
+}, 1000);
