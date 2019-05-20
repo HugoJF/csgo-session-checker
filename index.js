@@ -174,8 +174,6 @@ const offline = {};
 setInterval(() => {
     fetchOnlineServers((online) => {
         fetchRunningServers((running) => {
-            delete online[0];
-
             // Clean offline list if found online
             online.forEach((server) => {
                 delete offline[server];
