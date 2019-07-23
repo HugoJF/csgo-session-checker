@@ -192,7 +192,7 @@ setInterval(() => {
 
             missing.forEach((server) => {
                 shouldRestart(server, (should) => {
-                    if (should) restartServer(server);
+                    if (should && false) restartServer(server);
                 });
             });
         });
