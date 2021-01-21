@@ -21,7 +21,7 @@
     "request": "^2.83.0",
     "request-debug": "^0.2.0",
     "simple-statistics": "^7.0.2",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.4.0",
     "util": "^0.10.3"
   }
 }
