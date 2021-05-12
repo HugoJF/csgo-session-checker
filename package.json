@@ -16,7 +16,7 @@
     "express": "^4.16.2",
     "fs": "0.0.1-security",
     "gamedig": "^2.0.14",
-    "mathjs": "^5.8.0",
+    "mathjs": "^7.5.1",
     "rcon": "^1.0.3",
     "request": "^2.83.0",
     "request-debug": "^0.2.0",
